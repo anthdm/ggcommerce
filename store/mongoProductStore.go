@@ -23,6 +23,9 @@ func NewMongoProductStore(db *mongo.Database) *MongoProductStore {
 
 func (s *MongoProductStore) Insert(ctx context.Context, p *types.Product) error {
 	res, err := s.db.Collection(s.coll).InsertOne(ctx, p)
+	if err != nil {
+		return err
+	}
 	p.ID = res.InsertedID.(primitive.ObjectID).Hex()
 
 	return err
