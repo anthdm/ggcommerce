@@ -38,6 +38,21 @@ func (h *ProductHandler) HandlePostProduct(c *weavebox.Context) error {
 	return c.JSON(http.StatusOK, product)
 }
 
+func (h *ProductHandler) HandleGetProducts(c *weavebox.Context) error {
+	products, err := h.store.GetAll(c.Context)
+	if err != nil {
+		return err
+	}
+	return c.JSON(http.StatusOK, products)
+}
+
 func (h *ProductHandler) HandleGetProductByID(c *weavebox.Context) error {
-	return c.JSON(http.StatusOK, &types.Product{SKU: "SHOE-1111"})
+	id := c.Param("id")
+
+	product, err := h.store.GetByID(c.Context, id)
+	if err != nil {
+		return err
+	}
+
+	return c.JSON(http.StatusOK, product)
 }

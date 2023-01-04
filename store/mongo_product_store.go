@@ -31,6 +31,17 @@ func (s *MongoProductStore) Insert(ctx context.Context, p *types.Product) error 
 	return err
 }
 
+func (s *MongoProductStore) GetAll(ctx context.Context) ([]*types.Product, error) {
+	cursor, err := s.db.Collection(s.coll).Find(ctx, map[string]any{})
+	if err != nil {
+		return nil, err
+	}
+
+	products := []*types.Product{}
+	err = cursor.All(ctx, &products)
+	return products, err
+}
+
 func (s *MongoProductStore) GetByID(ctx context.Context, id string) (*types.Product, error) {
 	var (
 		objID, _ = primitive.ObjectIDFromHex(id)
